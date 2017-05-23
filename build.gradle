@@ -1,0 +1,20 @@
+apply plugin: 'java'
+
+task compileTest(type: JavaExec) {
+    dependsOn build
+    group = 'build'
+
+    inputs.dir('$buildDir/classes/main')
+    outputs.dir('$buildDir/classes/test/Test.class')
+
+    main = 'pl.bushee.jcompiler.Compiler'
+    classpath sourceSets.main.runtimeClasspath
+}
+
+task testCompiler(type: JavaExec) {
+    dependsOn compileTest
+    group = 'verification'
+
+    main = 'Test'
+    classpath sourceSets.test.runtimeClasspath
+}
