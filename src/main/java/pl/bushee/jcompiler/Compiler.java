@@ -1,5 +1,7 @@
 package pl.bushee.jcompiler;
 
+import pl.bushee.jcompiler.definition.Class;
+
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -36,13 +38,11 @@ public class Compiler {
     private static final short ACC_SYNTHETIC = 0x1000;
 
     private static final byte[] MAGIC = {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
-    private static final byte[] MAJOR_VERSION = {0, 52};
-    private static final byte[] MINOR_VERSION = {0, 0};
     private static final byte[] ACCESS_FLAGS = {0x10, 0x01};
     private static final byte[] THIS_CLASS = {0, 1};
     private static final byte[] SUPER_CLASS = {0, 3};
 
-    public static void main(String[] args) throws IOException {
+    public void writeToFile(Class jClass, File outputFile) throws IOException {
         byte[] constantPool = {
             // 1: this_class
             CONSTANT_Class, // tag
@@ -200,15 +200,10 @@ public class Compiler {
         byte[] attributes = {};
         byte[] attributesCount = {0, 0};
 
-        File outputFile = new File("build/classes/test/Test.class");
-        File parentFile = outputFile.getParentFile();
-        if (!parentFile.exists() && !parentFile.mkdirs()) {
-            System.err.println("Couldn't create parent directory");
-        }
         DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(outputFile));
         dataOutputStream.write(MAGIC);
-        dataOutputStream.write(MINOR_VERSION);
-        dataOutputStream.write(MAJOR_VERSION);
+        dataOutputStream.writeShort(jClass.getVersion().getMinor());
+        dataOutputStream.writeShort(jClass.getVersion().getMajor());
         dataOutputStream.write(constantPoolCount);
         dataOutputStream.write(constantPool);
         dataOutputStream.write(ACCESS_FLAGS);
@@ -222,7 +217,6 @@ public class Compiler {
         dataOutputStream.write(methods);
         dataOutputStream.write(attributesCount);
         dataOutputStream.write(attributes);
-        // TODO: attributes
         dataOutputStream.close();
     }
 }

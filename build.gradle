@@ -7,7 +7,7 @@ task compileTest(type: JavaExec) {
     inputs.dir('$buildDir/classes/main')
     outputs.dir('$buildDir/classes/test/Test.class')
 
-    main = 'pl.bushee.jcompiler.Compiler'
+    main = 'pl.bushee.jcompiler.Test'
     classpath sourceSets.main.runtimeClasspath
 }
 
