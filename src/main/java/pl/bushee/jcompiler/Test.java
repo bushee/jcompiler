@@ -1,5 +1,6 @@
 package pl.bushee.jcompiler;
 
+import pl.bushee.jcompiler.definition.AccessFlags;
 import pl.bushee.jcompiler.definition.JClass;
 import pl.bushee.jcompiler.definition.Version;
 
@@ -16,6 +17,7 @@ public class Test {
 
         JClass jClass = new JClass("Test");
         jClass.setVersion(new Version(52, 0));
+        jClass.setAccessFlags(AccessFlags.AccessFlag.PUBLIC, AccessFlags.AccessFlag.SYNTHETIC);
 
         jClass.writeToFile(outputFile);
     }
