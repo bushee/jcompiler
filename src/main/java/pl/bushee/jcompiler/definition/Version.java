@@ -1,5 +1,8 @@
 package pl.bushee.jcompiler.definition;
 
+import java.io.DataOutputStream;
+import java.io.IOException;
+
 public class Version {
     private final int major;
     private final int minor;
@@ -15,5 +18,10 @@ public class Version {
 
     public int getMinor() {
         return minor;
+    }
+
+    void writeToFile(final DataOutputStream dataOutputStream) throws IOException {
+        dataOutputStream.writeShort(minor);
+        dataOutputStream.writeShort(major);
     }
 }

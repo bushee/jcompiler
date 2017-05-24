@@ -210,8 +210,7 @@ public class Class {
 
         DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(outputFile));
         dataOutputStream.write(MAGIC);
-        dataOutputStream.writeShort(version.getMinor());
-        dataOutputStream.writeShort(version.getMajor());
+        version.writeToFile(dataOutputStream);
         dataOutputStream.write(constantPoolCount);
         dataOutputStream.write(constantPool);
         dataOutputStream.write(ACCESS_FLAGS);
