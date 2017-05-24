@@ -1,6 +1,6 @@
 package pl.bushee.jcompiler;
 
-import pl.bushee.jcompiler.definition.Class;
+import pl.bushee.jcompiler.definition.JClass;
 import pl.bushee.jcompiler.definition.Version;
 
 import java.io.File;
@@ -14,7 +14,7 @@ public class Test {
             System.err.println("Couldn't create parent directory");
         }
 
-        Class jClass = new Class();
+        JClass jClass = new JClass("Test");
         jClass.setVersion(new Version(52, 0));
 
         jClass.writeToFile(outputFile);
