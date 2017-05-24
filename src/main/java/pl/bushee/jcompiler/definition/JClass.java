@@ -1,5 +1,7 @@
 package pl.bushee.jcompiler.definition;
 
+import pl.bushee.jcompiler.util.ClassNameConverter;
+
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -39,7 +41,7 @@ public class JClass {
     private static final byte[] MAGIC = {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
     private static final byte[] ACCESS_FLAGS = {0x10, 0x01};
     private static final int THIS_CLASS = 1;
-    private static final byte[] SUPER_CLASS = {0, 3};
+    private static final int SUPER_CLASS = 3;
 
     private final String className;
     private final Class superClass;
@@ -117,7 +119,7 @@ public class JClass {
         }
         dataOutputStream.write(ACCESS_FLAGS);
         dataOutputStream.writeShort(THIS_CLASS);
-        dataOutputStream.write(SUPER_CLASS);
+        dataOutputStream.writeShort(SUPER_CLASS);
         dataOutputStream.write(interfacesCount);
         dataOutputStream.write(interfaces);
         dataOutputStream.write(fieldsCount);
@@ -141,10 +143,7 @@ public class JClass {
                 CONSTANT_Class, // tag
                 0, 4, // index
         }, {
-                // 4: java.lang.Object
-                CONSTANT_Utf8, // tag
-                0, 16, // length
-                'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'O', 'b', 'j', 'e', 'c', 't', // class name
+                // 4: super class name
         }, {
                 // 5: main method name
                 CONSTANT_Utf8, // tag
@@ -249,6 +248,13 @@ public class JClass {
         constantPool[1][1] = (byte) (classNameBytes.length >>> 8 & 255);
         constantPool[1][2] = (byte) (classNameBytes.length & 255);
         System.arraycopy(classNameBytes, 0, constantPool[1], 3, classNameBytes.length);
+
+        byte[] superClassNameBytes = ClassNameConverter.toInternal(superClass).getBytes(Charset.forName("UTF-8"));
+        constantPool[3] = new byte[3 + superClassNameBytes.length];
+        constantPool[3][0] = CONSTANT_Utf8;
+        constantPool[3][1] = (byte) (superClassNameBytes.length >>> 8 & 255);
+        constantPool[3][2] = (byte) (superClassNameBytes.length & 255);
+        System.arraycopy(superClassNameBytes, 0, constantPool[3], 3, superClassNameBytes.length);
 
         return constantPool;
     }
