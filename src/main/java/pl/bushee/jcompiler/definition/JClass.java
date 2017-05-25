@@ -1,6 +1,7 @@
 package pl.bushee.jcompiler.definition;
 
 import pl.bushee.jcompiler.definition.Attribute.Attributes;
+import pl.bushee.jcompiler.definition.Method.Methods;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -25,6 +26,7 @@ public class JClass {
     private final AccessFlags accessFlags = new AccessFlags();
     private final Interfaces interfaces = new Interfaces();
     private final Fields fields = new Fields();
+    private final Methods methods = new Methods();
     private final Attributes attributes = new Attributes();
 
     public JClass(final String className) {
@@ -76,41 +78,16 @@ public class JClass {
         fields.setTo(fieldsArray);
     }
 
+    public Set<Method> getMethods() {
+        return methods.copy();
+    }
+
+    public void setMethods(Method... methodsArray) {
+        methods.setTo(methodsArray);
+    }
+
     public void writeToFile(final File outputFile) throws IOException {
         final ConstantPool constantPool = new ConstantPool(this);
-        byte[] methods = {
-            // 0: public static void main
-            0, 0x09, // access flags
-            0, 5, // name index
-            0, 6, // descriptor index
-            0, 2, // attributes count
-            // attributes
-            // 0:0: Code
-            0, 7, // name index
-            0, 0, 0, 21, // length
-            0, 2, // max stack
-            0, 1, // max locals
-            0, 0, 0, 9, // code length
-            (byte) 0xb2, 0, 11, // getstatic
-            (byte) 0x12, 17, // ldc
-            (byte) 0xb6, 0, 19, // invokevirtual
-            (byte) 0xb1, // return
-            0, 0, // exception table length
-            // exception table
-            0, 0, // attributes count
-            // attribute info
-            // 0:1: LocalVariableTable
-            0, 8, // name index
-            0, 0, 0, 12, // length
-            0, 1, // local variable table length
-            // 0:1:0: String[] args
-            0, 0, // start pc
-            0, 1, // length
-            0, 9, // name index
-            0, 10, // descriptor index
-            0, 0, // index
-        };
-        byte[] methodsCount = {0, 1};
 
         DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(outputFile));
         dataOutputStream.writeInt((int) MAGIC);
@@ -121,8 +98,7 @@ public class JClass {
         dataOutputStream.writeShort(SUPER_CLASS);
         interfaces.writeToFile(dataOutputStream);
         fields.writeToFile(dataOutputStream);
-        dataOutputStream.write(methodsCount);
-        dataOutputStream.write(methods);
+        methods.writeToFile(dataOutputStream);
         attributes.writeToFile(dataOutputStream);
         dataOutputStream.close();
     }
