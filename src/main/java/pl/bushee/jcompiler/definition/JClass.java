@@ -15,7 +15,7 @@ import static pl.bushee.jcompiler.definition.Interface.Interfaces;
 
 public class JClass {
 
-    private static final byte[] MAGIC = {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE};
+    private static final long MAGIC = 0xCAFEBABE;
     private static final int THIS_CLASS = 1;
     private static final int SUPER_CLASS = 3;
 
@@ -113,7 +113,7 @@ public class JClass {
         byte[] methodsCount = {0, 1};
 
         DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(outputFile));
-        dataOutputStream.write(MAGIC);
+        dataOutputStream.writeInt((int) MAGIC);
         version.writeToFile(dataOutputStream);
         constantPool.writeToFile(dataOutputStream);
         accessFlags.writeToFile(dataOutputStream);
