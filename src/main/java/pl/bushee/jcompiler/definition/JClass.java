@@ -1,5 +1,7 @@
 package pl.bushee.jcompiler.definition;
 
+import pl.bushee.jcompiler.definition.Attribute.Attributes;
+
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,6 +25,7 @@ public class JClass {
     private final AccessFlags accessFlags = new AccessFlags();
     private final Interfaces interfaces = new Interfaces();
     private final Fields fields = new Fields();
+    private final Attributes attributes = new Attributes();
 
     public JClass(final String className) {
         this(className, Object.class);
@@ -108,8 +111,6 @@ public class JClass {
             0, 0, // index
         };
         byte[] methodsCount = {0, 1};
-        byte[] attributes = {};
-        byte[] attributesCount = {0, 0};
 
         DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(outputFile));
         dataOutputStream.write(MAGIC);
@@ -122,8 +123,7 @@ public class JClass {
         fields.writeToFile(dataOutputStream);
         dataOutputStream.write(methodsCount);
         dataOutputStream.write(methods);
-        dataOutputStream.write(attributesCount);
-        dataOutputStream.write(attributes);
+        attributes.writeToFile(dataOutputStream);
         dataOutputStream.close();
     }
 }
