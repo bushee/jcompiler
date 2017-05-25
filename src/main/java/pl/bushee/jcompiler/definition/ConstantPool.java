@@ -25,7 +25,7 @@ class ConstantPool {
 
     private final JClass jClass;
 
-    public ConstantPool(final JClass jClass) {
+    ConstantPool(final JClass jClass) {
         this.jClass = jClass;
     }
 
