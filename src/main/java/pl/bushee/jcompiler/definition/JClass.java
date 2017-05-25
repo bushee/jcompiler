@@ -4,6 +4,9 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.EnumSet;
+
+import static pl.bushee.jcompiler.definition.AccessFlag.AccessFlags;
 
 public class JClass {
 
@@ -14,7 +17,7 @@ public class JClass {
     private final String className;
     private final Class superClass;
     private Version version;
-    private AccessFlags accessFlags = new AccessFlags();
+    private final AccessFlags accessFlags = new AccessFlags();
 
     public JClass(final String className) {
         this(className, Object.class);
@@ -41,12 +44,12 @@ public class JClass {
         this.version = version;
     }
 
-    public AccessFlags getAccessFlags() {
-        return new AccessFlags(accessFlags);
+    public EnumSet<AccessFlag> getAccessFlags() {
+        return accessFlags.copy();
     }
 
-    public void setAccessFlags(AccessFlags.AccessFlag... accessFlagArray) {
-        accessFlags = new AccessFlags(accessFlagArray);
+    public void setAccessFlags(AccessFlag... accessFlagArray) {
+        accessFlags.setTo(accessFlagArray);
     }
 
     public void writeToFile(final File outputFile) throws IOException {
