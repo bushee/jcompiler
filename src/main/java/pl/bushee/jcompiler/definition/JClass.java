@@ -2,6 +2,7 @@ package pl.bushee.jcompiler.definition;
 
 import pl.bushee.jcompiler.definition.Attribute.Attributes;
 import pl.bushee.jcompiler.definition.Method.Methods;
+import pl.bushee.jcompiler.definition.constant.ClassReference;
 
 import java.io.DataOutputStream;
 import java.io.File;
@@ -17,11 +18,9 @@ import static pl.bushee.jcompiler.definition.Interface.Interfaces;
 public class JClass {
 
     private static final long MAGIC = 0xCAFEBABE;
-    private static final int THIS_CLASS = 1;
-    private static final int SUPER_CLASS = 3;
 
-    private final String className;
-    private final Class superClass;
+    private final ClassReference className;
+    private final ClassReference superClass;
     private Version version;
     private final AccessFlags accessFlags = new AccessFlags();
     private final Interfaces interfaces = new Interfaces();
@@ -34,15 +33,15 @@ public class JClass {
     }
 
     public JClass(final String className, Class superClass) {
-        this.className = className;
-        this.superClass = superClass;
+        this.className = new ClassReference(className);
+        this.superClass = new ClassReference(superClass);
     }
 
-    public String getClassName() {
+    public ClassReference getClassName() {
         return className;
     }
 
-    public Class getSuperClass() {
+    public ClassReference getSuperClass() {
         return superClass;
     }
 
@@ -87,15 +86,15 @@ public class JClass {
     }
 
     public void writeToFile(final File outputFile) throws IOException {
-        final ConstantPool constantPool = new ConstantPool(this);
+        final ConstantPool constantPool = ConstantPool.forJClass(this);
 
         DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(outputFile));
         dataOutputStream.writeInt((int) MAGIC);
         version.writeToFile(dataOutputStream);
         constantPool.writeToFile(dataOutputStream);
         accessFlags.writeToFile(dataOutputStream);
-        dataOutputStream.writeShort(THIS_CLASS);
-        dataOutputStream.writeShort(SUPER_CLASS);
+        dataOutputStream.writeShort(constantPool.indexOf(className));
+        dataOutputStream.writeShort(constantPool.indexOf(superClass));
         interfaces.writeToFile(dataOutputStream);
         fields.writeToFile(dataOutputStream);
         methods.writeToFile(dataOutputStream);
