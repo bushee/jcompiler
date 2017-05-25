@@ -5,8 +5,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.EnumSet;
+import java.util.Set;
 
 import static pl.bushee.jcompiler.definition.AccessFlag.AccessFlags;
+import static pl.bushee.jcompiler.definition.Interface.Interfaces;
 
 public class JClass {
 
@@ -18,6 +20,7 @@ public class JClass {
     private final Class superClass;
     private Version version;
     private final AccessFlags accessFlags = new AccessFlags();
+    private final Interfaces interfaces = new Interfaces();
 
     public JClass(final String className) {
         this(className, Object.class);
@@ -52,10 +55,16 @@ public class JClass {
         accessFlags.setTo(accessFlagArray);
     }
 
+    public Set<Interface> getInterfaces() {
+        return interfaces.copy();
+    }
+
+    public void setInterfaces(Interface... interfacesArray) {
+        interfaces.setTo(interfacesArray);
+    }
+
     public void writeToFile(final File outputFile) throws IOException {
         final ConstantPool constantPool = new ConstantPool(this);
-        byte[] interfaces = {};
-        byte[] interfacesCount = {0, 0};
         byte[] fields = {};
         byte[] fieldsCount = {0, 0};
         byte[] methods = {
@@ -101,8 +110,7 @@ public class JClass {
         accessFlags.writeToFile(dataOutputStream);
         dataOutputStream.writeShort(THIS_CLASS);
         dataOutputStream.writeShort(SUPER_CLASS);
-        dataOutputStream.write(interfacesCount);
-        dataOutputStream.write(interfaces);
+        interfaces.writeToFile(dataOutputStream);
         dataOutputStream.write(fieldsCount);
         dataOutputStream.write(fields);
         dataOutputStream.write(methodsCount);
