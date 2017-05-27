@@ -88,7 +88,7 @@ public class JClass {
         dataOutputStream.writeShort(constantPool.indexOf(superClass));
         interfaces.writeToFile(dataOutputStream);
         fields.writeToFile(dataOutputStream);
-        methods.writeToFile(dataOutputStream);
+        methods.writeToFile(constantPool, dataOutputStream);
         attributes.writeToFile(dataOutputStream);
         dataOutputStream.close();
     }

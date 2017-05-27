@@ -4,6 +4,8 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 
 public class Version {
+    // TODO: constants for predefined versions
+
     private final int major;
     private final int minor;
 

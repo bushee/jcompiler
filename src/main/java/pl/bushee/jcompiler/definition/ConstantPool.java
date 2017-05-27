@@ -40,16 +40,6 @@ class ConstantPool implements ConstantPoolMutator, ConstantPoolAccessor {
 
     void writeToFile(final DataOutputStream dataOutputStream) throws IOException {
         final byte[][] constantPool = {{
-            // 5: main method name
-            CONSTANT_Utf8, // tag
-            0, 4, // length
-            'm', 'a', 'i', 'n',// class name
-        }, {
-            // 6: main method descriptor
-            CONSTANT_Utf8, // tag
-            0, 22, // length
-            '(', '[', 'L', 'j', 'a', 'v', 'a', '/', 'l', 'a', 'n', 'g', '/', 'S', 't', 'r', 'i', 'n', 'g', ';', ')', 'V', // method descriptor
-        }, {
             // 7: Code attribute name
             CONSTANT_Utf8, // tag,
             0, 4, // length
@@ -151,6 +141,7 @@ class ConstantPool implements ConstantPoolMutator, ConstantPoolAccessor {
         final ConstantPool pool = new ConstantPool();
         jClass.getClassName().addToPool(pool);
         jClass.getSuperClass().addToPool(pool);
+        jClass.getMethods().forEach(method -> method.addToPool(pool));
         return pool;
     }
 
