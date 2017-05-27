@@ -4,6 +4,7 @@ import pl.bushee.jcompiler.definition.Constant;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public final class Utf8Value extends Constant {
@@ -25,7 +26,7 @@ public final class Utf8Value extends Constant {
 
     @Override
     protected void writeData(final ConstantPoolAccessor constantPoolAccessor, final DataOutputStream dataOutputStream) throws IOException {
-        final byte[] bytes = value.getBytes();
+        final byte[] bytes = value.getBytes(StandardCharsets.UTF_8);
         dataOutputStream.writeShort(bytes.length);
         dataOutputStream.write(bytes);
     }
