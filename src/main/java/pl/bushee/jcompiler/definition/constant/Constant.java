@@ -1,9 +1,14 @@
-package pl.bushee.jcompiler.definition;
+package pl.bushee.jcompiler.definition.constant;
+
+import pl.bushee.jcompiler.definition.ConstantPoolAccessor;
+import pl.bushee.jcompiler.definition.ConstantPoolMutator;
+import pl.bushee.jcompiler.definition.ConstantRegistering;
+import pl.bushee.jcompiler.definition.ConstantUsingWriter;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public abstract class Constant implements ConstantRegistering {
+public abstract class Constant implements ConstantRegistering, ConstantUsingWriter {
     abstract protected int getTag();
 
     abstract protected Constant[] getDependencies();
@@ -24,7 +29,8 @@ public abstract class Constant implements ConstantRegistering {
         }
     }
 
-    final void writeToFile(final ConstantPoolAccessor constantPoolAccessor, final DataOutputStream dataOutputStream) throws IOException {
+    @Override
+    public final void writeToFile(final ConstantPoolAccessor constantPoolAccessor, final DataOutputStream dataOutputStream) throws IOException {
         dataOutputStream.writeByte(getTag());
         writeData(constantPoolAccessor, dataOutputStream);
     }

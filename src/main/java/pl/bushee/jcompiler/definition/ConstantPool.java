@@ -1,5 +1,7 @@
 package pl.bushee.jcompiler.definition;
 
+import pl.bushee.jcompiler.definition.constant.Constant;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;

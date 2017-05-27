@@ -1,6 +1,5 @@
 package pl.bushee.jcompiler.definition.constant;
 
-import pl.bushee.jcompiler.definition.Constant;
 import pl.bushee.jcompiler.definition.ConstantPoolAccessor;
 import pl.bushee.jcompiler.util.ClassNameConverter;
 
