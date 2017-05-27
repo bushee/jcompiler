@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-class ConstantPool {
+class ConstantPool implements ConstantPoolAccessor {
 
     private static final byte CONSTANT_Class = 7;
     private static final byte CONSTANT_Fieldref = 9;
@@ -24,13 +24,14 @@ class ConstantPool {
 
     private final List<Constant> pool = new ArrayList<>();
 
-    void add(Constant constant) {
+    void add(final Constant constant) {
         if (!pool.contains(constant)) {
             pool.add(constant);
         }
     }
 
-    int indexOf(Constant constant) {
+    @Override
+    public int indexOf(final Constant constant) {
         return pool.indexOf(constant) + 1;
     }
 

@@ -23,12 +23,8 @@ public abstract class Constant {
         }
     }
 
-    final void writeToFile(final ConstantPool constantPool, final DataOutputStream dataOutputStream) throws IOException {
+    final void writeToFile(final ConstantPoolAccessor constantPoolAccessor, final DataOutputStream dataOutputStream) throws IOException {
         dataOutputStream.writeByte(getTag());
-        writeData(constantPool::indexOf, dataOutputStream);
-    }
-
-    protected interface ConstantPoolAccessor {
-        int indexOf(final Constant constant);
+        writeData(constantPoolAccessor, dataOutputStream);
     }
 }
