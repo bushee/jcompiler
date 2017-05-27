@@ -2,7 +2,6 @@ package pl.bushee.jcompiler;
 
 import pl.bushee.jcompiler.definition.AccessFlag;
 import pl.bushee.jcompiler.definition.JClass;
-import pl.bushee.jcompiler.definition.Version;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,9 +14,11 @@ public class Test {
             System.err.println("Couldn't create parent directory");
         }
 
-        JClass jClass = new JClass("Test");
-        jClass.setVersion(new Version(52, 0));
-        jClass.setAccessFlags(AccessFlag.PUBLIC, AccessFlag.SYNTHETIC);
+        JClass jClass = JClass.builder()
+            .withClassName("Test")
+            .withVersion(52, 0)
+            .withAccessFlags(AccessFlag.PUBLIC, AccessFlag.SYNTHETIC)
+            .build();
 
         jClass.writeToFile(outputFile);
     }

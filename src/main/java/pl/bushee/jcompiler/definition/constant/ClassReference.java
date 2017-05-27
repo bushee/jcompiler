@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.util.Objects;
 
 public final class ClassReference extends Constant {
+    public static final ClassReference OBJECT = new ClassReference(Object.class);
+
     private final Utf8Value className;
 
     public ClassReference(final String className) {

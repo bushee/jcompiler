@@ -51,9 +51,8 @@ public class Method {
             dataOutputStream.write(methods);
         }
 
-        void setTo(final Method[] methodsArray) {
-            methods.clear();
-            Collections.addAll(methods, methodsArray);
+        void add(final Method... methods) {
+            Collections.addAll(this.methods, methods);
         }
 
         Set<Method> copy() {

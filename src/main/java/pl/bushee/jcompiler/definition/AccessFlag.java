@@ -37,8 +37,7 @@ public enum AccessFlag {
             dataOutputStream.writeShort(flagsBin);
         }
 
-        void setTo(final AccessFlag[] accessFlags) {
-            flags.clear();
+        void add(final AccessFlag... accessFlags) {
             Collections.addAll(flags, accessFlags);
         }
 

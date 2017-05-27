@@ -18,9 +18,8 @@ class Attribute {
             // TODO: write attributes
         }
 
-        void setTo(final Attribute[] attributesArray) {
-            attributes.clear();
-            Collections.addAll(attributes, attributesArray);
+        void add(final Attribute... attributes) {
+            Collections.addAll(this.attributes, attributes);
         }
 
         Set<Attribute> copy() {

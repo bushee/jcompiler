@@ -18,9 +18,8 @@ public class Field {
             // TODO: write field infos
         }
 
-        void setTo(final Field[] fieldsArray) {
-            fields.clear();
-            Collections.addAll(fields, fieldsArray);
+        void add(final Field... fields) {
+            Collections.addAll(this.fields, fields);
         }
 
         Set<Field> copy() {

@@ -18,9 +18,8 @@ public class Interface {
             // TODO: write interface references
         }
 
-        void setTo(final Interface[] interfacesArray) {
-            interfaces.clear();
-            Collections.addAll(interfaces, interfacesArray);
+        void add(final Interface... interfaces) {
+            Collections.addAll(this.interfaces, interfaces);
         }
 
         Set<Interface> copy() {
