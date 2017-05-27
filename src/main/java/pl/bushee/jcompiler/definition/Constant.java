@@ -3,7 +3,7 @@ package pl.bushee.jcompiler.definition;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-public abstract class Constant {
+public abstract class Constant implements ConstantRegistering {
     abstract protected int getTag();
 
     abstract protected Constant[] getDependencies();
@@ -16,7 +16,8 @@ public abstract class Constant {
 
     // abstract public String toString();
 
-    final protected void addToPool(final ConstantPoolMutator constantPoolMutator) {
+    @Override
+    public final void addToPool(final ConstantPoolMutator constantPoolMutator) {
         constantPoolMutator.add(this);
         for (Constant constant : getDependencies()) {
             constantPoolMutator.add(constant);
