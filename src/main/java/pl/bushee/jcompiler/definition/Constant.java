@@ -16,10 +16,10 @@ public abstract class Constant {
 
     // abstract public String toString();
 
-    final protected void addToPool(final ConstantPool pool) {
-        pool.add(this);
+    final protected void addToPool(final ConstantPoolMutator constantPoolMutator) {
+        constantPoolMutator.add(this);
         for (Constant constant : getDependencies()) {
-            pool.add(constant);
+            constantPoolMutator.add(constant);
         }
     }
 
