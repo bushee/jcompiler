@@ -40,16 +40,6 @@ class ConstantPool implements ConstantPoolMutator, ConstantPoolAccessor {
 
     void writeToFile(final DataOutputStream dataOutputStream) throws IOException {
         final byte[][] constantPool = {{
-            // 7: Code attribute name
-            CONSTANT_Utf8, // tag,
-            0, 4, // length
-            'C', 'o', 'd', 'e', // attribute name
-        }, {
-            // 8: LocalVariableTable attribute name
-            CONSTANT_Utf8, // tag,
-            0, 18, // length
-            'L', 'o', 'c', 'a', 'l', 'V', 'a', 'r', 'i', 'a', 'b', 'l', 'e', 'T', 'a', 'b', 'l', 'e', // attribute name
-        }, {
             // 9: args parameter name
             CONSTANT_Utf8, // tag,
             0, 4, // length

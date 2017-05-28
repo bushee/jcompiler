@@ -1,6 +1,9 @@
 package pl.bushee.jcompiler.definition;
 
 import pl.bushee.jcompiler.definition.AccessFlag.AccessFlags;
+import pl.bushee.jcompiler.definition.attribute.Attribute.Attributes;
+import pl.bushee.jcompiler.definition.attribute.Code;
+import pl.bushee.jcompiler.definition.attribute.LocalVariableTable;
 import pl.bushee.jcompiler.definition.constant.Utf8Value;
 import pl.bushee.jcompiler.definition.constant.type.ClassType;
 import pl.bushee.jcompiler.definition.constant.type.Type;
@@ -18,15 +21,18 @@ public class Method implements ConstantRegistering, ConstantUsingWriter {
     private final AccessFlags accessFlags;
     private final Utf8Value name;
     private final Utf8Value methodDescriptor;
+    private final Attributes attributes;
 
     private Method(
         final AccessFlags accessFlags,
         final Utf8Value name,
-        final Utf8Value methodDescriptor
+        final Utf8Value methodDescriptor,
+        final Attributes attributes
     ) {
         this.accessFlags = accessFlags;
         this.name = name;
         this.methodDescriptor = methodDescriptor;
+        this.attributes = attributes;
     }
 
     public EnumSet<AccessFlag> getAccessFlags() {
@@ -45,6 +51,7 @@ public class Method implements ConstantRegistering, ConstantUsingWriter {
     public void addToPool(final ConstantPoolMutator constantPoolMutator) {
         constantPoolMutator.add(name);
         constantPoolMutator.add(methodDescriptor);
+        attributes.addToPool(constantPoolMutator);
     }
 
     @Override
@@ -52,34 +59,7 @@ public class Method implements ConstantRegistering, ConstantUsingWriter {
         accessFlags.writeToFile(dataOutputStream);
         dataOutputStream.writeShort(constantPoolAccessor.indexOf(name));
         dataOutputStream.writeShort(constantPoolAccessor.indexOf(methodDescriptor));
-        dataOutputStream.writeShort(2); // TODO: attributes count
-        dataOutputStream.write(new byte[]{
-            // attributes
-            // 0:0: Code
-            0, 7, // name index
-            0, 0, 0, 21, // length
-            0, 2, // max stack
-            0, 1, // max locals
-            0, 0, 0, 9, // code length
-            (byte) 0xb2, 0, 11, // getstatic
-            (byte) 0x12, 17, // ldc
-            (byte) 0xb6, 0, 19, // invokevirtual
-            (byte) 0xb1, // return
-            0, 0, // exception table length
-            // exception table
-            0, 0, // attributes count
-            // attribute info
-            // 0:1: LocalVariableTable
-            0, 8, // name index
-            0, 0, 0, 12, // length
-            0, 1, // local variable table length
-            // 0:1:0: String[] args
-            0, 0, // start pc
-            0, 1, // length
-            0, 9, // name index
-            0, 10, // descriptor index
-            0, 0, // index
-        });
+        attributes.writeToFile(constantPoolAccessor, dataOutputStream);
     }
 
     static class Methods implements ConstantUsingWriter {
@@ -107,6 +87,7 @@ public class Method implements ConstantRegistering, ConstantUsingWriter {
         private final AccessFlags accessFlags = new AccessFlags();
         private Utf8Value name;
         private Utf8Value methodDescriptor;
+        private final Attributes attributes = new Attributes();
 
         public Builder withAccessFlags(final AccessFlag... accessFlags) {
             this.accessFlags.add(accessFlags);
@@ -144,8 +125,18 @@ public class Method implements ConstantRegistering, ConstantUsingWriter {
             return withMethodDescriptor(new ClassType(returnType), argumentTypes);
         }
 
+        public Builder withCode(final Code code) {
+            this.attributes.add(code);
+            return this;
+        }
+
+        public Builder withLocalVariableTable(final LocalVariableTable localVariableTable) {
+            this.attributes.add(localVariableTable);
+            return this;
+        }
+
         public Method build() {
-            return new Method(accessFlags, name, methodDescriptor);
+            return new Method(accessFlags, name, methodDescriptor, attributes);
         }
 
         private List<Type> asTypeList(Object... argumentTypes) {

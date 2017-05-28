@@ -1,6 +1,7 @@
 package pl.bushee.jcompiler.definition;
 
-import pl.bushee.jcompiler.definition.Attribute.Attributes;
+import pl.bushee.jcompiler.definition.attribute.Attribute;
+import pl.bushee.jcompiler.definition.attribute.Attribute.Attributes;
 import pl.bushee.jcompiler.definition.Method.Methods;
 import pl.bushee.jcompiler.definition.constant.ClassReference;
 
@@ -89,7 +90,7 @@ public class JClass {
         interfaces.writeToFile(dataOutputStream);
         fields.writeToFile(dataOutputStream);
         methods.writeToFile(constantPool, dataOutputStream);
-        attributes.writeToFile(dataOutputStream);
+        attributes.writeToFile(constantPool, dataOutputStream);
         dataOutputStream.close();
     }
 

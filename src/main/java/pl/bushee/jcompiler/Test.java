@@ -3,6 +3,8 @@ package pl.bushee.jcompiler;
 import pl.bushee.jcompiler.definition.AccessFlag;
 import pl.bushee.jcompiler.definition.JClass;
 import pl.bushee.jcompiler.definition.Method;
+import pl.bushee.jcompiler.definition.attribute.Code;
+import pl.bushee.jcompiler.definition.attribute.LocalVariableTable;
 import pl.bushee.jcompiler.definition.constant.type.ArrayOf;
 import pl.bushee.jcompiler.definition.constant.type.ClassType;
 import pl.bushee.jcompiler.definition.constant.type.VoidType;
@@ -27,6 +29,8 @@ public class Test {
                     .withAccessFlags(AccessFlag.PUBLIC, AccessFlag.STATIC)
                     .withName("main")
                     .withMethodDescriptor(new VoidType(), new ArrayOf(new ClassType(String.class)))
+                    .withCode(new Code())
+                    .withLocalVariableTable(new LocalVariableTable())
                     .build())
             .build();
 
