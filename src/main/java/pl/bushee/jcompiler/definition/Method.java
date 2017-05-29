@@ -89,6 +89,8 @@ public class Method implements ConstantRegistering, ConstantUsingWriter {
         private Utf8Value methodDescriptor;
         private final Attributes attributes = new Attributes();
 
+        private Builder() {}
+
         public Builder withAccessFlags(final AccessFlag... accessFlags) {
             this.accessFlags.add(accessFlags);
             return this;

@@ -1,8 +1,8 @@
 package pl.bushee.jcompiler.definition;
 
+import pl.bushee.jcompiler.definition.Method.Methods;
 import pl.bushee.jcompiler.definition.attribute.Attribute;
 import pl.bushee.jcompiler.definition.attribute.Attribute.Attributes;
-import pl.bushee.jcompiler.definition.Method.Methods;
 import pl.bushee.jcompiler.definition.constant.ClassReference;
 
 import java.io.DataOutputStream;
@@ -107,6 +107,9 @@ public class JClass {
         private final Fields fields = new Fields();
         private final Methods methods = new Methods();
         private final Attributes attributes = new Attributes();
+
+        private Builder() {
+        }
 
         public Builder withClassName(final ClassReference classReference) {
             className = classReference;
