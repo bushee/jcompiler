@@ -78,7 +78,7 @@ public class JClass {
     }
 
     public void writeToFile(final File outputFile) throws IOException {
-        final ConstantPool constantPool = ConstantPool.forJClass(this);
+        final ConstantPool constantPool = createConstantPool();
 
         DataOutputStream dataOutputStream = new DataOutputStream(new FileOutputStream(outputFile));
         dataOutputStream.writeInt((int) MAGIC);
@@ -96,6 +96,14 @@ public class JClass {
 
     public static Builder builder() {
         return new Builder();
+    }
+
+    private ConstantPool createConstantPool() {
+        final ConstantPool pool = new ConstantPool();
+        className.addToPool(pool);
+        superClass.addToPool(pool);
+        methods.addToPool(pool);
+        return pool;
     }
 
     public static class Builder {

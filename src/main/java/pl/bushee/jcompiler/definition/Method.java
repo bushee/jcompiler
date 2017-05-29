@@ -62,9 +62,16 @@ public class Method implements ConstantRegistering, ConstantUsingWriter {
         attributes.writeToFile(constantPoolAccessor, dataOutputStream);
     }
 
-    static class Methods implements ConstantUsingWriter {
+    static class Methods implements ConstantRegistering, ConstantUsingWriter {
 
         private final Set<Method> methods = new HashSet<>();
+
+        @Override
+        public void addToPool(final ConstantPoolMutator constantPoolMutator) {
+            for (Method method : methods) {
+                method.addToPool(constantPoolMutator);
+            }
+        }
 
         @Override
         public void writeToFile(final ConstantPoolAccessor constantPoolAccessor, final DataOutputStream dataOutputStream) throws IOException {
@@ -89,7 +96,8 @@ public class Method implements ConstantRegistering, ConstantUsingWriter {
         private Utf8Value methodDescriptor;
         private final Attributes attributes = new Attributes();
 
-        private Builder() {}
+        private Builder() {
+        }
 
         public Builder withAccessFlags(final AccessFlag... accessFlags) {
             this.accessFlags.add(accessFlags);

@@ -117,14 +117,6 @@ class ConstantPool implements ConstantPoolMutator, ConstantPoolAccessor {
         }
     }
 
-    static ConstantPool forJClass(final JClass jClass) {
-        final ConstantPool pool = new ConstantPool();
-        jClass.getClassName().addToPool(pool);
-        jClass.getSuperClass().addToPool(pool);
-        jClass.getMethods().forEach(method -> method.addToPool(pool));
-        return pool;
-    }
-
     @Override
     public String toString() {
         final StringBuilder stringBuilder = new StringBuilder();
