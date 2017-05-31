@@ -14,7 +14,7 @@ public class Code extends Attribute {
 
     @Override
     int getLength() {
-        return 21;
+        return 12 + getCodeLength() + getExceptionTableLength() + getAttributesLength();
     }
 
     @Override
@@ -36,5 +36,17 @@ public class Code extends Attribute {
             0, 0, // attributes count
             // attribute info
         });
+    }
+
+    private int getCodeLength() {
+        return 9;
+    }
+
+    private int getExceptionTableLength() {
+        return 0;
+    }
+
+    private int getAttributesLength() {
+        return 0;
     }
 }
