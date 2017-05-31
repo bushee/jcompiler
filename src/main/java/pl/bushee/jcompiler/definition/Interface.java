@@ -2,28 +2,17 @@ package pl.bushee.jcompiler.definition;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
 
-public class Interface {
+public class Interface implements Definition {
     // TODO
 
-    static class Interfaces {
+    @Override
+    public void addToPool(ConstantPoolMutator constantPoolMutator) {
+        // TODO
+    }
 
-        private final Set<Interface> interfaces = new HashSet<>();
-
-        void writeToFile(final DataOutputStream dataOutputStream) throws IOException {
-            dataOutputStream.writeShort(interfaces.size());
-            // TODO: write interface references
-        }
-
-        void add(final Interface... interfaces) {
-            Collections.addAll(this.interfaces, interfaces);
-        }
-
-        Set<Interface> copy() {
-            return new HashSet<>(interfaces);
-        }
+    @Override
+    public void writeToFile(ConstantPoolAccessor constantPoolAccessor, DataOutputStream dataOutputStream) throws IOException {
+        // TODO
     }
 }

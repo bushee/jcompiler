@@ -1,7 +1,7 @@
 package pl.bushee.jcompiler.definition;
 
 import pl.bushee.jcompiler.definition.AccessFlag.AccessFlags;
-import pl.bushee.jcompiler.definition.attribute.Attribute.Attributes;
+import pl.bushee.jcompiler.definition.attribute.Attribute;
 import pl.bushee.jcompiler.definition.attribute.Code;
 import pl.bushee.jcompiler.definition.attribute.LocalVariableTable;
 import pl.bushee.jcompiler.definition.constant.Utf8Value;
@@ -11,23 +11,20 @@ import pl.bushee.jcompiler.definition.constant.type.Type;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.EnumSet;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
-public class Method implements ConstantRegistering, ConstantUsingWriter {
+public class Method implements Definition {
     private final AccessFlags accessFlags;
     private final Utf8Value name;
     private final Utf8Value methodDescriptor;
-    private final Attributes attributes;
+    private final DefinitionList<Attribute> attributes;
 
     private Method(
         final AccessFlags accessFlags,
         final Utf8Value name,
         final Utf8Value methodDescriptor,
-        final Attributes attributes
+        final DefinitionList<Attribute> attributes
     ) {
         this.accessFlags = accessFlags;
         this.name = name;
@@ -62,39 +59,11 @@ public class Method implements ConstantRegistering, ConstantUsingWriter {
         attributes.writeToFile(constantPoolAccessor, dataOutputStream);
     }
 
-    static class Methods implements ConstantRegistering, ConstantUsingWriter {
-
-        private final Set<Method> methods = new HashSet<>();
-
-        @Override
-        public void addToPool(final ConstantPoolMutator constantPoolMutator) {
-            for (Method method : methods) {
-                method.addToPool(constantPoolMutator);
-            }
-        }
-
-        @Override
-        public void writeToFile(final ConstantPoolAccessor constantPoolAccessor, final DataOutputStream dataOutputStream) throws IOException {
-            dataOutputStream.writeShort(methods.size());
-            for (Method method : methods) {
-                method.writeToFile(constantPoolAccessor, dataOutputStream);
-            }
-        }
-
-        void add(final Method... methods) {
-            Collections.addAll(this.methods, methods);
-        }
-
-        Set<Method> copy() {
-            return new HashSet<>(methods);
-        }
-    }
-
     public static class Builder {
         private final AccessFlags accessFlags = new AccessFlags();
         private Utf8Value name;
         private Utf8Value methodDescriptor;
-        private final Attributes attributes = new Attributes();
+        private final DefinitionList<Attribute> attributes = new DefinitionList<>();
 
         private Builder() {
         }

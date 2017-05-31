@@ -1,8 +1,6 @@
 package pl.bushee.jcompiler.definition;
 
-import pl.bushee.jcompiler.definition.Method.Methods;
 import pl.bushee.jcompiler.definition.attribute.Attribute;
-import pl.bushee.jcompiler.definition.attribute.Attribute.Attributes;
 import pl.bushee.jcompiler.definition.constant.ClassReference;
 
 import java.io.DataOutputStream;
@@ -13,8 +11,6 @@ import java.util.EnumSet;
 import java.util.Set;
 
 import static pl.bushee.jcompiler.definition.AccessFlag.AccessFlags;
-import static pl.bushee.jcompiler.definition.Field.Fields;
-import static pl.bushee.jcompiler.definition.Interface.Interfaces;
 
 public class JClass {
 
@@ -24,20 +20,20 @@ public class JClass {
     private final ClassReference superClass;
     private final Version version;
     private final AccessFlags accessFlags;
-    private final Interfaces interfaces;
-    private final Fields fields;
-    private final Methods methods;
-    private final Attributes attributes;
+    private final DefinitionList<Interface> interfaces;
+    private final DefinitionList<Field> fields;
+    private final DefinitionList<Method> methods;
+    private final DefinitionList<Attribute> attributes;
 
     private JClass(
         final ClassReference className,
         final ClassReference superClass,
         final Version version,
         final AccessFlags accessFlags,
-        final Interfaces interfaces,
-        final Fields fields,
-        final Methods methods,
-        final Attributes attributes
+        final DefinitionList<Interface> interfaces,
+        final DefinitionList<Field> fields,
+        final DefinitionList<Method> methods,
+        final DefinitionList<Attribute> attributes
     ) {
         this.className = className;
         this.superClass = superClass;
@@ -87,8 +83,8 @@ public class JClass {
         accessFlags.writeToFile(dataOutputStream);
         dataOutputStream.writeShort(constantPool.indexOf(className));
         dataOutputStream.writeShort(constantPool.indexOf(superClass));
-        interfaces.writeToFile(dataOutputStream);
-        fields.writeToFile(dataOutputStream);
+        interfaces.writeToFile(constantPool, dataOutputStream);
+        fields.writeToFile(constantPool, dataOutputStream);
         methods.writeToFile(constantPool, dataOutputStream);
         attributes.writeToFile(constantPool, dataOutputStream);
         dataOutputStream.close();
@@ -111,10 +107,10 @@ public class JClass {
         private ClassReference superClass = ClassReference.OBJECT;
         private Version version;
         private final AccessFlags accessFlags = new AccessFlags();
-        private final Interfaces interfaces = new Interfaces();
-        private final Fields fields = new Fields();
-        private final Methods methods = new Methods();
-        private final Attributes attributes = new Attributes();
+        private final DefinitionList<Interface> interfaces = new DefinitionList<>();
+        private final DefinitionList<Field> fields = new DefinitionList<>();
+        private final DefinitionList<Method> methods = new DefinitionList<>();
+        private final DefinitionList<Attribute> attributes = new DefinitionList<>();
 
         private Builder() {
         }
